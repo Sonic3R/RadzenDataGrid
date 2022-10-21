@@ -1,0 +1,59 @@
+﻿@page "/fetchdata"
+@inherits FetchDataBase
+@using BlazorApp1.Shared
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<EditForm @ref=@_editForm Model="@_selectedItem">
+    <div class="row">
+        <div class="col d-flex">
+            <RadzenDataGrid @ref=@_grid
+                            IsLoading=@_isLoading
+                            Count=@_totalItems
+                            Data=@_items
+                            EditMode="DataGridEditMode.Single"
+                            LoadData=@LoadData
+                            AllowColumnResize="true"
+                            AllowPaging="true"
+                            PageSize=@_pageSize
+                            PagerAlwaysVisible="true"
+                            PagerPosition="PagerPosition.TopAndBottom"
+                            PagerHorizontalAlign="HorizontalAlign.Left"
+                            AllowSorting="true"
+                            TItem="WeatherForecast">
+                <EmptyTemplate>
+                    <p class="datagrid-no-records">No matching results</p>
+                </EmptyTemplate>
+                <Columns>
+                    <RadzenDataGridColumn TItem="WeatherForecast" Title="Sr. no" TextAlign="TextAlign.Center" Width="70px" Sortable=false>
+                        <Template Context="item">
+                            <RadzenLabel Text="--" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="WeatherForecast" Property="TemperatureC" Title="Temperature" TextAlign="TextAlign.Center" Sortable=false>
+                        <EditTemplate Context="item">
+                            <CascadingValue Value=@_editForm.EditContext IsFixed="false">
+                                <div class="cell-item">
+                                    <RadzenTextBox @bind-Value="@item.Temperature" class="w-100 mb-1" />
+                                </div>
+                            </CascadingValue>
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="WeatherForecast" Title="Action" TextAlign="TextAlign.Center" Width="100px" Sortable=false>
+                        <Template Context="item">
+                            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" class="edit-btn" Size="ButtonSize.Medium" @onclick:stopPropagation="true" Click="@(() => EditRow(item))" />
+                        </Template>
+                        <EditTemplate Context="item">
+                            <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Medium" Click="@(() => SaveRow(item))" />
+                            <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Medium" Class="my-1 ms-1" Click="@(() => CancelEdit(item))" />
+                        </EditTemplate>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    </div>
+</EditForm>
