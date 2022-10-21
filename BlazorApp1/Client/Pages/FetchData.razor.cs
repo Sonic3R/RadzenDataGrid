@@ -9,7 +9,7 @@ namespace BlazorApp1.Client.Pages
                 "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        protected override WeatherForecast _selectedItem => new WeatherForecast();
+        protected override WeatherForecast _selectedItem => new();
 
         protected override Task LoadDataAsync()
         {
